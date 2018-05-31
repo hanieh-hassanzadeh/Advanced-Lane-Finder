@@ -8,7 +8,7 @@ To calibrate the camera I used series of chessboard images (./camera_cal/calibra
 
 Compare an example of an original and an undistorted image, using the computed camera matrix and distortion coefficients, bellow
 
-![undistortion](https://github.com/hanieh-hassanzadeh/Advanced_Lane_Find/blob/master/outputImages/undistortion.jpg)
+![undistortion](https://github.com/hanieh-hassanzadeh/Advanced-Lane-Finder/blob/master/outputImages/undistortion.jpg)
 
 ### Pipeline
 

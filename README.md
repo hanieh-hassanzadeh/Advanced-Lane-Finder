@@ -19,7 +19,7 @@ Consider a single image shown bellow:
 ![original](https://github.com/hanieh-hassanzadeh/Advanced-Lane-Finder/blob/master/test_images/test2.jpg)
  
 
-#### 1. Correct distortion
+#### 1. Correcting distortion
 The first step is to undistort the image by ```cv2.undistort``` function utlizing the saved camera matrix and distortion coefficients; like this undistorted image for the above original image
 
 ![Undistort](https://github.com/hanieh-hassanzadeh/Advanced-Lane-Finder/blob/master/outputImages/undist_test2.jpg)
@@ -43,13 +43,22 @@ I tested different combimations of Color transforms and concluded that the two m
 
 The correcponding image is outputed as:
 
-![alt text](https://github.com/hanieh-hassanzadeh/Advanced-Lane-Finder/blob/master/outputImages/warp_test2.jpg)
+![alt text](https://github.com/hanieh-hassanzadeh/Advanced-Lane-Finder/blob/master/outputImages/binary_test2.jpg)
 
-############### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
+#### 4. Identifying lane-line pixels and polynomial fitting
 
-Then I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this:
+To detect the line pixels, I used sliding-window method. In this method, starting from the bottom of the image (for each left and right line, separately), a small window (of 
 
-![alt text][image5]
+). In the beginning, I convert the noises which appear on the edges of the image into black pixels. These nioses belong to the image of the car dashboard in the bottom of the image, and the artificial lines which were added to the edges from previous processes. This is part is coded in the `lineDetection` function in within ```polynomial.py```.
+
+In the same function, I calculate the curvature of each line pixels by fitting a second order line through each left and right set (`np.polyfit` is used for this purpose). Suposing that a line is defined as 
+`X = a * Y^2 + b * Y + c` 
+the curvature is defined as
+`X = mX / (mY^2) *a*(Y^2) + (mX/mY)*b*Y + c`
+where mX and mY are the X and Y converted to meters from pixel space.
+
+
+![alt text](https://github.com/hanieh-hassanzadeh/Advanced-Lane-Finder/blob/master/outputImages/lined_test2.jpg)
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 

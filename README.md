@@ -1,28 +1,28 @@
 # **Advanced Lane Finding Project**
 
-The goal of this project is to accurately detect the lane lines captured by the camera centered on the center of an autonomous vehicle. The first challenge is that the available cameras distort the captured pictures. Therefore, I start with camera calibration.
+The goal of this project is to accurately detect the lane lines and their curvature, captured by the camera centered on the center of an autonomous vehicle. 
 
 ### Camera Calibration
 
-To calibrate the camera I used series of chessboard images ```./camera_cal/calibration*.jpg``` to computed the camera matrix and distortion coefficients using ```cv2.calibrateCamera``` function. These camera properties are then stored into the ```../camera_calibration_parameters.pickle``` file. as mtx and dist, respectively, for a later use.
+The first challenge is that the available cameras distort the captured pictures. Therefore, I start with camera calibration. To calibrate the camera I used series of chessboard images (```./camera_cal/calibration*.jpg```) to compute the camera matrix and distortion coefficients using ```cv2.calibrateCamera``` function. These camera properties are then stored into the ```../camera_calibration_parameters.pickle``` file as mtx and dist, respectively, for later use.
 
-Compare an example of an original and an undistorted image, using the computed camera matrix and distortion coefficients, bellow
+Compare the example of original image and undistorted image (obtained using the computed camera matrix and distortion coefficients) bellow
 
 ![undistortion](https://github.com/hanieh-hassanzadeh/Advanced-Lane-Finder/blob/master/outputImages/undistortion.jpg)
 
 ### Pipeline
 
-The pipline of this project to extract the safe lane area (the area between two lanelines) from a camera captured video is consist of several steps (the pipeline is coded in ```./main.py```). First off, I will explain how to go through these steps for a single road image. These steps can then be applied to series of consequent images of the video frames.
+The pipline of this project to extract the safe lane area (the area between two lanelines) from a camera captured video is consist of several steps (the pipeline is coded in ```./main.py```). First off, I will explain how to go through these steps for a single road image. These steps can then be applied to series of consecutive images of the video frames.
 
 Consider a single image shown bellow:
 
-![test image](https://github.com/hanieh-hassanzadeh/Advanced-Lane-Finder/blob/master/test_images/test2.jpg)
+![original](https://github.com/hanieh-hassanzadeh/Advanced-Lane-Finder/blob/master/test_images/test2.jpg)
  
 
 #### 1. Correct distortion
 The first step is to undistort the image by ```cv2.undistort``` function utlizing the saved camera matrix and distortion coefficients; like this undistorted image for the above original image
 
-![alt text][image2]
+![Undistort][https://github.com/hanieh-hassanzadeh/Advanced-Lane-Finder/blob/master/outputImages/undist_test2.jpg]
 
 #### 2. Perspective transform
 Unlike the suggested method in the course, I decided to do the Perspective transform before Color transform. I realized that playing around various color transforms to find a better solution in detecting lines is easier once I zoom in to my region of interest (ROI: the trapezium area consisting of the lanelines only). This step is done through ```imgwarpper``` function in main.py file, which takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points. In this function, I used ```cv2.getPerspectiveTransform``` by hardcoding `src' and 'dst' as:

@@ -22,31 +22,28 @@ Consider a single image shown bellow:
 #### 1. Correct distortion
 The first step is to undistort the image by ```cv2.undistort``` function utlizing the saved camera matrix and distortion coefficients; like this undistorted image for the above original image
 
-![Undistort][https://github.com/hanieh-hassanzadeh/Advanced-Lane-Finder/blob/master/outputImages/undist_test2.jpg]
+![Undistort](https://github.com/hanieh-hassanzadeh/Advanced-Lane-Finder/blob/master/outputImages/undist_test2.jpg)
 
 #### 2. Perspective transform
-Unlike the suggested method in the course, I decided to do the Perspective transform before Color transform. I realized that playing around various color transforms to find a better solution in detecting lines is easier once I zoom in to my region of interest (ROI: the trapezium area consisting of the lanelines only). This step is done through ```imgwarpper``` function in main.py file, which takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points. In this function, I used ```cv2.getPerspectiveTransform``` by hardcoding `src' and 'dst' as:
+Unlike the suggested method in the course, I decided to do the Perspective transform before Color transform. I realized that playing around various color transforms to find a better solution in detecting lines is easier once I zoom in to my region of interest (ROI: the trapezium area consisting of the lanelines only). This step is done through ```imgwarpper``` function in 'main.py' file, which takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points. In this function, I used ```cv2.getPerspectiveTransform``` function by hardcoding `src` and `dst` as:
 
 ```python
 src = np.float32([[200, 720], [1050, 720], [595, 450], [685, 450]])
 dst = np.float32([[300, 720], [980, 720], [300, 0], [980, 0]])
 ```
-Bellow image shows how ROI is correctly surrounded by `src`.
 
-![alt text][image3]
+The resulted warped image (bird view of the ROI) is then outputted by the ```imgwarpper``` function, as following image:
 
-The resulted warped image (bird view of the ROI) is the outputted by the ```imgwarpper``` function, as following image
-
-![alt text][image3]
+![warped](https://github.com/hanieh-hassanzadeh/Advanced-Lane-Finder/blob/master/outputImages/warp_test2.jpg)
 
 
 #### 3. Color transforms
 
-I tested different combimations of color transforms and concluded that the two most effective ones are the Strength (S) chennel of the HLS format and the Sobel gradient in X direction with kernel size of 3. The Color transforms function is called ```colorTransform``` and is located in `lineDetectionThresholds.py` file.
+I tested different combimations of Color transforms and concluded that the two most effective ones are the Strength (S) chennel of the HLS format and the Sobel gradient in X direction with kernel size of 3. The Color transforms function is called ```colorTransform``` and is located in `lineDetectionThresholds.py` file.
 
 The correcponding image is outputed as:
 
-![alt text][image4]
+![alt text](https://github.com/hanieh-hassanzadeh/Advanced-Lane-Finder/blob/master/outputImages/warp_test2.jpg)
 
 ############### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 

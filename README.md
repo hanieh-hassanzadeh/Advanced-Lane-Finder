@@ -47,9 +47,16 @@ The correcponding image is outputed as:
 
 #### 4. Identifying lane-line pixels and polynomial fitting
 
-To detect the line pixels, I used sliding-window method. In this method, starting from the bottom of the image (for each left and right line, separately), a small window (of 
+To detect the line pixels, I used sliding-window method. In this method, starting from the bottom of the image (for each left and right line, separately), a small window sweeps the image to find the best match between the line pixels and the template window (where the lines are located, most probably). When the whole image is swept, the line pixel within each detected window are considered to find the best fitted line.
 
-). In the beginning, I convert the noises which appear on the edges of the image into black pixels. These nioses belong to the image of the car dashboard in the bottom of the image, and the artificial lines which were added to the edges from previous processes. This is part is coded in the `lineDetection` function in within ```polynomial.py```.
+From the second image on for the video frames, the position of the previous detected line is used as the base for the search step. The final line is obtained by fitting a second order line over the new pixels and the pixels found in the last two images. This is essential to have more accurate lines by preventing an abrupt change in the position of the line.
+
+It is worth notting that in the beginning, I converted the noised-pixels which appear on the edges of the image into black pixels. These nioses mostly belong to the car dashboard in the bottom of the image, the sudden shades appear on the image, and the artificial lines which were added to the edges from previous processes. This part is coded in the `lineDetection` function in within ```polynomial.py```.
+
+
+![alt text](https://github.com/hanieh-hassanzadeh/Advanced-Lane-Finder/blob/master/outputImages/lined_test2.jpg)
+
+#### 5. Radius of curvature of the lane and the position of the vehicle with respect to center
 
 In the same function, I calculate the curvature of each line pixels by fitting a second order line through each left and right set (`np.polyfit` is used for this purpose). Suposing that a line is defined as 
 `X = a * Y^2 + b * Y + c` 
@@ -58,31 +65,30 @@ the curvature is defined as
 where mX and mY are the X and Y converted to meters from pixel space.
 
 
-![alt text](https://github.com/hanieh-hassanzadeh/Advanced-Lane-Finder/blob/master/outputImages/lined_test2.jpg)
+#### 6. Final image
 
-#### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
+As the last step, I unwarpped the warped image using the `Minv`, and positioned the detected lane into the original image through ```imgUnwarpper``` function in ```main.py``` file. Here, is the resulted image with the lane shown in green.
 
-I did this in lines # through # in my code in `my_other_file.py`
-
-#### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
-
-I implemented this step in lines # through # in my code in `yet_another_file.py` in the function `map_lane()`.  Here is an example of my result on a test image:
-
-![alt text][image6]
+![final](https://github.com/hanieh-hassanzadeh/Advanced-Lane-Finder/blob/master/outputImages/annotated_test2.jpg)
 
 ---
 
 ### Pipeline (video)
 
-#### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
+The above mentioned steps are all done by defining ```processImages``` class that processes each image. The same applies for each video frame. I did the slicing and writting back the resulted images into a video format using `VideoFileClip` functions of `moviepy.editor` package.
 
-Here's a [link to my video result](./project_video.mp4)
+Here's a [link to my video result](https://github.com/hanieh-hassanzadeh/Advanced_Lane_Finder/blob/master/outputVideo/project_video_annotated.mp4)
 
 ---
 
 ### Discussion
 
-#### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
+The techniues used here work the best when the road looks like the provided video. However when there are objects on the scenery which could be mistaken by the lane lines, this code may fail detecting the right lines. The roads with cracks or sharp shades of the vihecles which are changing their laned are some examples of these kinds.
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+Moreover, different countries have different standards for roads design, which may not fall into the default category, considered here; such as line patterns or colors. 
 
+Some roads do not even have correct or any lines what so ever. This could be due to the recent construction or extention of the roads. And, some lines are faded due to insufficient maintenance.
+
+The situation could also get worse to find accurate lines in night time or under rainy and snowy condition.
+
+It seems that a perfect solution is not easy achieve. However, I highly suggect to use deep learning algoriths, which are closer to human brain in solving problems, as the base algorithm and combine them with computer vision solution, where helpful. 

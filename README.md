@@ -81,8 +81,7 @@ As the last step, I unwarpped the warped image using the `Minv`, and positioned 
 
 The above mentioned steps are all done by defining `Lines` class in `lines.py` that processes each image. The same applies for each video frame. I did the slicing and writting back the resulted images into a video format using `VideoFileClip` functions of `moviepy.editor` package.
 
-Here's a link to my video result:
-![video](https://github.com/hanieh-hassanzadeh/Advanced-Lane-Finder/blob/master/outputvideo/project_video_annotated.mp4)
+[Here](https://github.com/hanieh-hassanzadeh/Advanced-Lane-Finder/blob/master/outputvideo/project_video_annotated.mp4) is a link to my video result
 
 ---
 

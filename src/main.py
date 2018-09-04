@@ -41,7 +41,7 @@ process_video  = True
 if process_images:
     lines = Lines()
     #Load the test images
-    testImgFiles = glob.glob('./test_images/test*.jpg')
+    testImgFiles = glob.glob('../test_images/test*.jpg')
 
     #If the output directory doesn't exist, create one
     try:
@@ -61,9 +61,9 @@ if process_video:
     except:
         os.mkdir("outputvideo")
 
-    outputVideo = './outputVideo/project_video_annotated.mp4'
+    outputVideo = '../outputVideo/project_video_annotated.mp4'
 
-    clip1 = VideoFileClip("./project_video.mp4")
+    clip1 = VideoFileClip("../project_video.mp4")
     clipImgs = clip1.fl_image(Lines(mtx, dist)) #This function expects color images!!
     #clip = clipImgs.subclip(3,43)#26)
     clipImgs.write_videofile(outputVideo, audio=False)

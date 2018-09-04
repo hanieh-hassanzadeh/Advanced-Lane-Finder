@@ -36,7 +36,7 @@ class Lines():
         #1. Correct undistortion
         undist = cv2.undistort(img, self.mtx, self.dist, None, self.mtx)
         #2. Perspective transform 
-        Wimg, M, Minv = imgwarpper(undist, self.mtx, self.dist)
+        Wimg, M, Minv = imgwarpper(undist)
         #3. Color transfors
         binary_lines = colorTransform (Wimg)
         #4. Identifying lane-line pixels and polynomial fitting
@@ -82,7 +82,7 @@ class Lines():
         # Set minimum number of pixels found to recenter window
         minpix = 50
         # Create empty lists to receive left and right lane pixel indices
-        left_lane_inds = []
+        left_lane_inds  = []
         right_lane_inds = []
  
         # Step through the windows one by one
@@ -187,26 +187,6 @@ class Lines():
         maskL = abs(self.fitxL_1-left_fitx)>thresh
         maskR = abs(self.fitxR_1-right_fitx)>thresh
 
-        '''if (any(maskL)) and (not(any(maskR))):
-            left_fitx[maskL] = right_fitx[maskL] - self.distance#\
-            #    np.mean(right_fitx[abs(self.xL-left_fitx)<20]-left_fitx[abs(self.xL-left_fitx)<20])
-            self.left_fit = np.polyfit(self.yfitted, left_fitx, 2)
-            left_fitx = self.left_fit[0]*self.yfitted**2 + self.left_fit[1]*self.yfitted + self.left_fit[2]
-
-        if not(any(maskL)) and (any(maskR)):
-            right_fitx[maskR] = left_fitx[maskR] + self.distance#\
-            #    np.mean(right_fitx[abs(self.xR-right_fitx)<20]-left_fitx[abs(self.xR-right_fitx)<20])
-            self.right_fit = np.polyfit(self.yfitted, right_fitx, 2)
-            right_fitx = self.right_fit[0]*self.yfitted**2 + self.right_fit[1]*self.yfitted + self.right_fit[2]
-
-        if (any(maskL)) and (any(maskR)):
-            if self.n < 3:
-                right_fitx = self.fitxR_1
-                left_fitx = self.fitxL_1
-                self.n += 1
-            else:
-                self.n = 0
-        '''
         if any(maskL):
             self.left_fit = np.polyfit(np.concatenate([lefty, self.yL_1]), np.concatenate([leftx, self.xL_1]), 2)
             left_fitx = self.left_fit[0]*self.yfitted**2 + self.left_fit[1]*self.yfitted + self.left_fit[2]
@@ -231,7 +211,7 @@ class Lines():
         left_curverad = ((1 + (2*left_fit_cr[0]*y_eval*ym_per_pix + left_fit_cr[1])**2)**1.5) / np.absolute(2*left_fit_cr[0])
         right_curverad = ((1 + (2*right_fit_cr[0]*y_eval*ym_per_pix + right_fit_cr[1])**2)**1.5) / np.absolute(2*right_fit_cr[0])
         # Now our radius of curvature is in meters
-        print(left_curverad, 'm', right_curverad, 'm')
+        #print(left_curverad, 'm', right_curverad, 'm')
         # Example values: 632.1 m    626.2 m
         ############################################################
         # Create an image to draw on and an image to show the selection window

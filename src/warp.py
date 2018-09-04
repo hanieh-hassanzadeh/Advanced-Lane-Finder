@@ -1,10 +1,8 @@
 import numpy as np
 import cv2
 
-def imgwarpper(img, mtx, dist):
+def imgwarpper(img):
 	img_size = (img.shape[1], img.shape[0])
-	#src = np.float32([[200, 720], [1050, 720], [595, 450], [685, 450]])
-	#dst = np.float32([[300, 720], [980, 720], [300, 0], [980, 0]])
 	src = np.float32([[585, 460], [203, 720], [1127, 720], [695, 460]])
 	dst = np.float32([[320, 0], [320, 720], [960, 720], [960, 0]])
         # Given src and dst points, calculate the perspective transform matrix
@@ -12,7 +10,7 @@ def imgwarpper(img, mtx, dist):
 	Minv = cv2.getPerspectiveTransform(dst, src)
 	# Warp the image using OpenCV warpPerspective()
 	warpedImg   = cv2.warpPerspective(img, M, img_size, flags=cv2.INTER_LINEAR)
-	return warpedImg, M, Minv#, src, dst
+	return warpedImg, M, Minv
 
 
 

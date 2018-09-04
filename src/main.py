@@ -29,41 +29,42 @@ class processImages:
         return annotated
 
 #******************************************************************
-#Load saved camera matrix and distortion coefficients
-with open('camera_calibration_parameters.pickle', 'rb') as handle:
-    camCal = pickle.load(handle)
-mtx  = camCal['mtx']
-dist = camCal['dist']
+if __name__ == '__main__':
+    #Load saved camera matrix and distortion coefficients
+    with open('camera_calibration_parameters.pickle', 'rb') as handle:
+        camCal = pickle.load(handle)
+    mtx  = camCal['mtx']
+    dist = camCal['dist']
 
-process_images = False
-process_video  = True
-#########test images##############
-if process_images:
-    lines = Lines()
-    #Load the test images
-    testImgFiles = glob.glob('../test_images/test*.jpg')
+    process_images = False
+    process_video  = True
+    #########test images##############
+    if process_images:
+        lines = Lines()
+        #Load the test images
+        testImgFiles = glob.glob('../test_images/test*.jpg')
 
-    #If the output directory doesn't exist, create one
-    try:
-        os.stat("outputImages")
-    except:
-        os.mkdir("outputImages")
+        #If the output directory doesn't exist, create one
+        try:
+            os.stat("../outputImages")
+        except:
+            os.mkdir("../outputImages")
 
-    for file in testImgFiles:
-        img = mpimg.imread(file)
-        annotated = processImage(img, mtx, dist)
+        for file in testImgFiles:
+            img = mpimg.imread(file)
+            annotated = processImage(img, mtx, dist)
 
-#########test video##############
-if process_video:
-    #If the output directory doesn't exist, create one
-    try:
-        os.stat("outputVideo")
-    except:
-        os.mkdir("outputvideo")
+    #########test video##############
+    if process_video:
+        #If the output directory doesn't exist, create one
+        try:
+            os.stat("../outputVideo")
+        except:
+            os.mkdir("../outputvideo")
 
-    outputVideo = '../outputVideo/project_video_annotated.mp4'
+        outputVideo = '../outputVideo/project_video_annotated.mp4'
 
-    clip1 = VideoFileClip("../project_video.mp4")
-    clipImgs = clip1.fl_image(Lines(mtx, dist)) #This function expects color images!!
-    #clip = clipImgs.subclip(3,43)#26)
-    clipImgs.write_videofile(outputVideo, audio=False)
+        clip1 = VideoFileClip("../test_video/project_video.mp4")
+        clipImgs = clip1.fl_image(Lines(mtx, dist)) #This function expects color images!!
+        #clip = clipImgs.subclip(3,43)#26)
+        clipImgs.write_videofile(outputVideo, audio=False)
